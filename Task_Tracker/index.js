@@ -1,20 +1,12 @@
 import { Command } from 'commander';
-import { input, select, Separator } from '@inquirer/prompts';
-import { access, constants, writeFile } from 'node:fs';
-import { cwd } from 'node:process';
-import path from 'node:path';
 
-const saveTask = (data) => {
-  const jsonData = JSON.stringify(data);
-  const file = path.join(cwd(), 'tasks.json');
-  access(file, constants.F_OK, (err) => {
-    console.log(`${file} ${err ? 'does not exist' : 'exists'}`);
-    writeFile(file, jsonData, (err) => {
-      if (err) throw err;
-      console.log('The File has beend saved!');
-    });
-  });
-};
+import {
+  addTask,
+  deleteTask,
+  listTask,
+  updateTask,
+} from './utils/tasksHandler.js';
+
 const program = new Command();
 
 program
@@ -33,41 +25,25 @@ program
   .description(
     'Allows users to create a new task with a name, status, and timestamp.'
   )
-  .action(async () => {
-    const description = await input({
-      message: 'Task Name',
-      default: 'Task 1',
-    });
-    const status = await select({
-      message: 'Select the Status',
-      choices: [
-        {
-          name: 'To do',
-          value: 'todo',
-          description: 'Task Not Start Yet',
-        },
-        {
-          name: 'In Progress',
-          value: 'in-progress',
-          description: 'Task In Progress',
-        },
-        {
-          name: 'Done',
-          value: 'done',
-          description: 'Task is Done Successfully',
-        },
-      ],
-    });
-    const date = new Date(Date.now());
-    const data = {
-      id: 1,
-      description,
-      status,
-      createdAt: date.toLocaleString(),
-      updatedAt: null,
-    };
-    console.log(data);
-    saveTask(data);
-  });
+  .action(addTask);
+
+program
+  .command('delete')
+  .description('Allow Users to delete a task with the TaskID')
+  .action(deleteTask);
+
+program
+  .command('list')
+  .description('Allow Users to list tasks')
+  .option('-a , --all', 'List all Tasks')
+  .option('-d, --done', 'List all done Tasks')
+  .option('-t , --todo', 'List all todo Tasks')
+  .option('-p, --progress', 'List all in-progress Tasks')
+  .action((option) => listTask(option));
+
+program
+  .command('update')
+  .description('Allow Users to Update task with the TaskID')
+  .action(updateTask);
 
 program.parse();
