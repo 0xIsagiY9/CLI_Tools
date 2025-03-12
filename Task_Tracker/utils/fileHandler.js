@@ -16,7 +16,6 @@ const fileWrite = (file, content) => {
       console.log(`Error in Create/Add Task:\n ${err}`);
       process.exit();
     }
-    console.log('Task Created Successfully  :)');
   });
 };
 
