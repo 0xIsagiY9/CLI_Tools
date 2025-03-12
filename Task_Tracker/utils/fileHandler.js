@@ -1,0 +1,65 @@
+import { access, constants, readFile, writeFile } from 'node:fs';
+
+const fileExist = (file, callback) => {
+  access(file, constants.F_OK, (err) => {
+    if (err) {
+      console.log('File does not Exist, Creating New File .....');
+      return callback(false);
+    }
+    callback(true);
+  });
+};
+
+const fileWrite = (file, content) => {
+  writeFile(file, JSON.stringify(content), 'utf-8', (err) => {
+    if (err) {
+      console.log(`Error in Create/Add Task:\n ${err}`);
+      process.exit();
+    }
+    console.log('Task Created Successfully  :)');
+  });
+};
+
+/**
+ *
+ * @param {*} file
+ * @param {*} callback  The callback Should Containt the Data
+ */
+const fileRead = (file, callback) => {
+  readFile(file, 'utf-8', (err, data) => {
+    if (err) {
+      console.log(`Error in Read File:\n ${err}`);
+      callback([]);
+    }
+    let retData;
+    try {
+      retData = JSON.parse(data);
+      if (!Array.isArray(retData)) retData = [];
+    } catch (err) {
+      console.log(
+        `File Content is Not valid JSON. Initialiaing as empty array.`
+      );
+      retData = [];
+    }
+    callback(retData);
+  });
+};
+
+// fileExist(fileHere, (exist) => {
+//   const contentHere = {
+//     id: 1,
+//     name: 'Second Task',
+//     date: Date.now(),
+//   };
+//   if (!exist) return fileWrite(fileHere, [contentHere]);
+//   fileRead(fileHere, (data) => {
+//     if (!data) {
+//       console.log(`Error In Data`);
+//       process.exit();
+//     }
+//     data.push(contentHere);
+//     fileWrite(fileHere, data);
+//   });
+// });
+
+export { fileExist, fileWrite, fileRead };
