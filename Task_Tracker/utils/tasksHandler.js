@@ -2,7 +2,7 @@ import { input, select } from '@inquirer/prompts';
 import { cwd } from 'node:process';
 import path from 'node:path';
 import { fileExist, fileRead, fileWrite } from './fileHandler.js';
-import { access, constants, readFile, writeFile } from 'node:fs';
+import { access, constants, readFile, stat, writeFile } from 'node:fs';
 
 /**
  * **********************************************************************************************************
@@ -67,12 +67,11 @@ const addTask = async () => {
       },
     ],
   });
-  const date = new Date(Date.now());
   const newdata = {
     id: 1,
     description,
     status,
-    createdAt: date.toLocaleString(),
+    createdAt: new Date(Date.now()).toLocaleString(),
     updatedAt: null,
   };
   saveTask(newdata);
@@ -114,6 +113,25 @@ const listTask = (option) => {
     }
   });
 };
-const updateTask = async (id) => {};
+const updateTask = (idOption, statusOption) => {
+  //1) Read the Data
+  fileRead(filePath, (data) => {
+    if (!data) {
+      console.log(`Error In Data`);
+      process.exit();
+    }
+    //2) Search for the ID
+    const idTofind = Number(idOption);
+    const taskIndex = data.findIndex((item) => item.id === idTofind);
+    if (taskIndex === -1) {
+      console.log(`Thas with the ID ${idOption} not found`);
+      process.exit();
+    }
+    data[taskIndex].status = statusOption;
+    (data[taskIndex].updatedAt = new Date(Date.now()).toLocaleString()),
+      fileWrite(filePath, data);
+    console.log(`Tasks Updated Successfully :)`);
+  });
+};
 
 export { addTask, deleteTask, listTask, updateTask };
