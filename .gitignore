@@ -1,3 +1,4 @@
 */node_modules/
 */.prettierrc
 tasks.json
+.vscode
