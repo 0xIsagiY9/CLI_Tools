@@ -45,6 +45,6 @@ program
   .command('update')
   .description('Allow Users to Update task with the TaskID')
   .option('-i, --id <number>', 'Enter the Task Id')
-  .action();
+  .action(updateTask);
 
 program.parse();
