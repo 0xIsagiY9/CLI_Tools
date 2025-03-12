@@ -3,7 +3,6 @@ import { cwd } from 'node:process';
 import path from 'node:path';
 import { fileExist, fileRead, fileWrite } from './fileHandler.js';
 import { access, constants, readFile, writeFile } from 'node:fs';
-import { createId } from './tasksID.js';
 
 /**
  * **********************************************************************************************************
@@ -80,23 +79,24 @@ const addTask = async () => {
 
 const deleteTask = async () => {};
 
-const listTask = async (option) => {
-  let tasksJson = [];
-  readFile(file, 'utf-8', (err, data) => {
-    if (err) throw err;
-    tasksJson = JSON.parse(data);
+const listTask = (option) => {
+  fileRead(filePath, (data) => {
+    if (!data) {
+      console.log(`Error In Data`);
+      process.exit();
+    }
 
-    if (option.all) console.log('All Tasks:\n', tasksJson);
+    if (option.all) console.log('All Tasks:\n', data);
     if (option.done) {
-      const doneTasks = tasksJson.filter((task) => task.status === 'done');
+      const doneTasks = data.filter((task) => task.status === 'done');
       console.log('Done Tasks:\n', doneTasks);
     }
     if (option.todo) {
-      const todoTasks = tasksJson.filter((task) => task.status === 'todo');
+      const todoTasks = data.filter((task) => task.status === 'todo');
       console.log('Todo Tasks:\n', todoTasks);
     }
     if (option.progress) {
-      const progressTasks = tasksJson.filter(
+      const progressTasks = data.filter(
         (task) => task.status === 'in-progress'
       );
       console.log('In Progress Tasks:\n', progressTasks);
