@@ -2,7 +2,6 @@ import { input, select } from '@inquirer/prompts';
 import { access, constants, writeFile, readFile, read } from 'node:fs';
 import { cwd } from 'node:process';
 import path from 'node:path';
-import { json } from 'node:stream/consumers';
 
 /**
  * **********************************************************************************************************
@@ -23,7 +22,7 @@ const saveTask = (newTask) => {
   access(file, constants.F_OK, (err) => {
     if (err) {
       console.log('File does not exist. Creating New Fiel....!');
-      return writeFile(file, JSON.stringify(newTask), 'utf-8', (err) => {
+      return writeFile(file, JSON.stringify([newTask]), 'utf-8', (err) => {
         if (err) {
           console.log(err);
           process.exit();
@@ -37,7 +36,16 @@ const saveTask = (newTask) => {
         console.log(err);
         process.exit();
       }
-      let readTasks = JSON.parse(data);
+      let readTasks;
+      try {
+        readTasks = JSON.parse(data);
+        if (!Array.isArray(readTasks)) readTasks = [];
+      } catch (err) {
+        console.log(
+          'File content is not valid JSON. Initializing as empty array.'
+        );
+        readTasks = [];
+      }
       readTasks.push(newTask);
       writeFile(file, JSON.stringify(readTasks), 'utf-8', (err) => {
         if (err) {
@@ -75,16 +83,37 @@ const addTask = async () => {
       },
     ],
   });
-  const date = new Date(Date.now());
-  const data = {
-    id: 1,
-    description,
-    status,
-    createdAt: date.toLocaleString(),
-    updatedAt: null,
-  };
-  console.log(data);
-  saveTask(data);
+  readFile(file, 'utf-8', (err, data) => {
+    if (err) {
+      console.log(err);
+      process.exit();
+    }
+    let readTasks;
+    try {
+      readTasks = JSON.parse(data);
+      if (!Array.isArray(readTasks)) readTasks = [];
+    } catch (err) {
+      console.log(
+        'File content is not valid JSON. Initializing as empty array.'
+      );
+      readTasks = [];
+    }
+    const lastTask = readTasks.at(-1);
+    let lastTaskId;
+    if (!lastTask) lastTaskId = 0;
+    else lastTaskId = lastTask.id;
+
+    const date = new Date(Date.now());
+    const newdata = {
+      id: lastTaskId + 1,
+      description,
+      status,
+      createdAt: date.toLocaleString(),
+      updatedAt: null,
+    };
+    console.log(newdata);
+    saveTask(newdata);
+  });
 };
 
 const deleteTask = async () => {};
