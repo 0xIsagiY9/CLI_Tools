@@ -37,6 +37,7 @@ const saveTask = (newTask) => {
       console.log(newTask);
       //3) Save Task to File
       fileWrite(filePath, data);
+      console.log(`Task Created Successfully :)`);
     });
   });
 };
@@ -77,7 +78,17 @@ const addTask = async () => {
   saveTask(newdata);
 };
 
-const deleteTask = async () => {};
+const deleteTask = () => {
+  fileRead(filePath, (data) => {
+    if (!data) {
+      console.log(`Error In Data`);
+      process.exit();
+    }
+    data = [];
+    fileWrite(filePath, data);
+    console.log(`Tasks Deleted Successfully :(`);
+  });
+};
 
 const listTask = (option) => {
   fileRead(filePath, (data) => {
