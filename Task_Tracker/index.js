@@ -23,14 +23,15 @@ program
 program
   .command('add')
   .description(
-    'Allows users to create a new task with a name, status, and timestamp.'
+    'Allows users to create a new task with a name, status, and data.'
   )
   .action(addTask);
 
 program
   .command('delete')
   .description('Allow Users to delete a task with the TaskID')
-  .action(deleteTask);
+  .option('-i , --id <number>', 'Delte the Task with Id')
+  .action((option) => deleteTask(option));
 
 program
   .command('list')
