@@ -2,7 +2,7 @@ import { input, select } from '@inquirer/prompts';
 import { cwd } from 'node:process';
 import path from 'node:path';
 import { fileExist, fileRead, fileWrite } from './fileHandler.js';
-import { access, constants, readFile, stat, writeFile } from 'node:fs';
+import printTable from './cliTable.js';
 
 /**
  * **********************************************************************************************************
@@ -34,7 +34,7 @@ const saveTask = (newTask) => {
       else lastId = lastData.id;
       newTask.id = lastId + 1;
       data.push(newTask);
-      console.log(newTask);
+      printTable([newTask]);
       //3) Save Task to File
       fileWrite(filePath, data);
       console.log(`Task Created Successfully :)`);
@@ -47,7 +47,7 @@ const addTask = async () => {
     message: 'Task Name',
     default: 'Task 1',
   });
-  const status = await select({
+  const taskStatus = await select({
     message: 'Select the Status',
     choices: [
       {
@@ -70,22 +70,34 @@ const addTask = async () => {
   const newdata = {
     id: 1,
     description,
-    status,
+    taskStatus,
     createdAt: new Date(Date.now()).toLocaleString(),
     updatedAt: null,
   };
   saveTask(newdata);
 };
 
-const deleteTask = () => {
+const deleteTask = (option) => {
   fileRead(filePath, (data) => {
     if (!data) {
       console.log(`Error In Data`);
       process.exit();
     }
-    data = [];
-    fileWrite(filePath, data);
-    console.log(`Tasks Deleted Successfully :(`);
+    //Remove the Selected Id Task
+    if (Object.keys(option).length !== 0) {
+      const idToRemove = Number(option.id);
+      const filterdTask = data.filter((item) => item.id !== idToRemove);
+      if (filterdTask.length === data.length) {
+        console.log(`Task with ID ${idToRemove} not found.`);
+        process.exit();
+      }
+      fileWrite(filePath, filterdTask);
+      console.log(`Task with Id: ${idToRemove} Deleted Successfully :)`);
+    } else {
+      data = [];
+      fileWrite(filePath, data);
+      console.log(`Tasks Deleted Successfully :)`);
+    }
   });
 };
 
@@ -95,21 +107,26 @@ const listTask = (option) => {
       console.log(`Error In Data`);
       process.exit();
     }
-
-    if (option.all) console.log('All Tasks:\n', data);
+    if (option.all || Object.keys(option).length === 0) {
+      console.log('All Tasks:\n');
+      printTable(data);
+    }
     if (option.done) {
-      const doneTasks = data.filter((task) => task.status === 'done');
-      console.log('Done Tasks:\n', doneTasks);
+      const doneTasks = data.filter((task) => task.taskStatus === 'done');
+      console.log('Done Tasks:\n');
+      printTable(doneTasks);
     }
     if (option.todo) {
-      const todoTasks = data.filter((task) => task.status === 'todo');
-      console.log('Todo Tasks:\n', todoTasks);
+      const todoTasks = data.filter((task) => task.taskStatus === 'todo');
+      console.log('Todo Tasks:\n');
+      printTable(todoTasks);
     }
     if (option.progress) {
       const progressTasks = data.filter(
-        (task) => task.status === 'in-progress'
+        (task) => task.taskStatus === 'in-progress'
       );
-      console.log('In Progress Tasks:\n', progressTasks);
+      console.log('In Progress Tasks:\n');
+      printTable(progressTasks);
     }
   });
 };
@@ -127,10 +144,11 @@ const updateTask = (idOption, statusOption) => {
       console.log(`Thas with the ID ${idOption} not found`);
       process.exit();
     }
-    data[taskIndex].status = statusOption;
+    data[taskIndex].taskStatus = statusOption;
     (data[taskIndex].updatedAt = new Date(Date.now()).toLocaleString()),
       fileWrite(filePath, data);
-    console.log(`Tasks Updated Successfully :)`);
+    console.log(`Task Updated Successfully :) \n`);
+    printTable([data[taskIndex]]);
   });
 };
 
