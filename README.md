@@ -15,8 +15,3 @@ Well-documented code with usage instructions
 Project From:  [roadmap.sh](https://roadmap.sh/projects/task-tracker)
 
 
-# ⚡ Installation & Usage
-- Clone Repo
-- `cd <project_name>`
-- `npm init`
-- `node index.js`
