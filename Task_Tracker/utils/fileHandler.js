@@ -44,21 +44,4 @@ const fileRead = (file, callback) => {
   });
 };
 
-// fileExist(fileHere, (exist) => {
-//   const contentHere = {
-//     id: 1,
-//     name: 'Second Task',
-//     date: Date.now(),
-//   };
-//   if (!exist) return fileWrite(fileHere, [contentHere]);
-//   fileRead(fileHere, (data) => {
-//     if (!data) {
-//       console.log(`Error In Data`);
-//       process.exit();
-//     }
-//     data.push(contentHere);
-//     fileWrite(fileHere, data);
-//   });
-// });
-
 export { fileExist, fileWrite, fileRead };
