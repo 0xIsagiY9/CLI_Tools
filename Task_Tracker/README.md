@@ -1,6 +1,3 @@
-## 🔗 Project URL
-[Task Tracker Project](https://roadmap.sh/projects/task-tracker)
-
 # ✅ Task Tracker
 
 <br/>
