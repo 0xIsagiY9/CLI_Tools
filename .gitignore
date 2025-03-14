@@ -1,5 +1,4 @@
 */node_modules/
 */.prettierrc
-tasks.json
+*/data.json
 .vscode
-
