@@ -1,7 +1,7 @@
 import { fileExist, fileRead, fileWrite } from './fileHandler.js';
 import { cwd } from 'node:process';
 import path from 'node:path';
-import { fips } from 'node:crypto';
+import printTable from './cliTable.js';
 
 const filePath = path.join(cwd(), 'data.json');
 const getUserData = async (username) => {
@@ -30,7 +30,7 @@ const extractData = () => {
         console.log(`There is No Data`);
         process.exit();
       }
-
+      printTable(data);
     });
   });
 };
@@ -39,4 +39,4 @@ const performOperation = (username) => {
   getUserData(username);
   extractData();
 };
-export { performOperation };
+export default performOperation;
