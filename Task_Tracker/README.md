@@ -1,12 +1,8 @@
-# ✅ Task Tracker
-
-<br/>
+# 🚀 Task Tracker
 
 Task Tracker is a simple command-line interface (CLI) tool that helps users manage and track their tasks efficiently. Users can add, list, update, and delete tasks using this CLI application.
 
-
-
-## 🚀 Features
+## ✨ Features
 
 - Add, remove, update, and list tasks.
 - Track completed and pending tasks.
@@ -22,7 +18,7 @@ cd task-tracker
 npm install
 ```
 
-## ⚡Usage
+## 📋 Usage
 
 After installation, you can run the CLI using:
 
