@@ -1,6 +1,8 @@
+## 🔗 Project URL
+[Task Tracker Project](https://roadmap.sh/projects/task-tracker)
+
 # ✅ Task Tracker
 
-Project From : https://roadmap.sh/projects/task-tracker
 <br/>
 
 Task Tracker is a simple command-line interface (CLI) tool that helps users manage and track their tasks efficiently. Users can add, list, update, and delete tasks using this CLI application.
