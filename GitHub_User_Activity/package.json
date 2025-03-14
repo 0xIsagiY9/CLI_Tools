@@ -1,0 +1,32 @@
+{
+  "name": "github_user_activity",
+  "version": "1.0.0",
+  "description": "In this project, you will build a simple command line interface (CLI) to fetch the recent activity of a GitHub user and display it in the terminal.",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/0xmuhammed9/CLI_Tools.git"
+  },
+  "keywords": [
+    "node.js",
+    "github_api",
+    "cli",
+    "github",
+    "api"
+  ],
+  "author": "isagi0xY0",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/0xmuhammed9/CLI_Tools/issues"
+  },
+  "homepage": "https://github.com/0xmuhammed9/CLI_Tools#readme",
+  "dependencies": {
+    "cli-table3": "^0.6.5",
+    "commander": "^13.1.0",
+    "inquirer": "^12.4.3"
+  }
+}
