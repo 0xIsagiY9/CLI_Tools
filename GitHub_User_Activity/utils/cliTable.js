@@ -20,7 +20,7 @@ const addEventToTable = (table, event, actionMessage) => {
   table.push(
     ['Repository', event.repo.name], // Fix typo here
     ['Action', actionMessage || ''],
-    ['Date', event.created_at],
+    ['Date', event.created_at]
   );
 };
 
