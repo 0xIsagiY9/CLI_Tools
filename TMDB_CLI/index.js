@@ -1,4 +1,5 @@
 import { Command } from 'commander';
+import PerformOperation from './utils/fetchHandler.js';
 
 const program = new Command();
 
@@ -13,8 +14,6 @@ program
   .command('get')
   .description('Get Movie')
   .option('-t , --type <string>', 'Type of Movies')
-  .action((option) => {
-    console.log(option);
-  });
+  .action((option) => PerformOperation(option));
 
 program.parse();
